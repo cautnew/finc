@@ -132,6 +132,120 @@
     --sidebar-ring: oklch(0.439 0 0);
 }
 
+/*
+ * Per-user accent color (resources/js/hooks/use-color-theme.ts sets [data-theme]
+ * on <html>, independent from the light/dark .dark class above).
+ * "preto" and "branco" intentionally have no overrides here - they map to the
+ * neutral palette already defined in :root/.dark.
+ */
+[data-theme='rosa'] {
+    --primary: oklch(0.55 0.22 350);
+    --primary-foreground: oklch(0.985 0 0);
+    --ring: oklch(0.55 0.22 350);
+    --sidebar-primary: oklch(0.55 0.22 350);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-ring: oklch(0.55 0.22 350);
+}
+
+.dark[data-theme='rosa'] {
+    --primary: oklch(0.75 0.2 350);
+    --primary-foreground: oklch(0.205 0 0);
+    --ring: oklch(0.75 0.2 350);
+    --sidebar-primary: oklch(0.75 0.2 350);
+    --sidebar-primary-foreground: oklch(0.205 0 0);
+    --sidebar-ring: oklch(0.75 0.2 350);
+}
+
+[data-theme='azul'] {
+    --primary: oklch(0.55 0.2 255);
+    --primary-foreground: oklch(0.985 0 0);
+    --ring: oklch(0.55 0.2 255);
+    --sidebar-primary: oklch(0.55 0.2 255);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-ring: oklch(0.55 0.2 255);
+}
+
+.dark[data-theme='azul'] {
+    --primary: oklch(0.75 0.16 255);
+    --primary-foreground: oklch(0.205 0 0);
+    --ring: oklch(0.75 0.16 255);
+    --sidebar-primary: oklch(0.75 0.16 255);
+    --sidebar-primary-foreground: oklch(0.205 0 0);
+    --sidebar-ring: oklch(0.75 0.16 255);
+}
+
+[data-theme='roxo'] {
+    --primary: oklch(0.5 0.22 300);
+    --primary-foreground: oklch(0.985 0 0);
+    --ring: oklch(0.5 0.22 300);
+    --sidebar-primary: oklch(0.5 0.22 300);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-ring: oklch(0.5 0.22 300);
+}
+
+.dark[data-theme='roxo'] {
+    --primary: oklch(0.72 0.2 300);
+    --primary-foreground: oklch(0.205 0 0);
+    --ring: oklch(0.72 0.2 300);
+    --sidebar-primary: oklch(0.72 0.2 300);
+    --sidebar-primary-foreground: oklch(0.205 0 0);
+    --sidebar-ring: oklch(0.72 0.2 300);
+}
+
+[data-theme='verde'] {
+    --primary: oklch(0.55 0.16 150);
+    --primary-foreground: oklch(0.985 0 0);
+    --ring: oklch(0.55 0.16 150);
+    --sidebar-primary: oklch(0.55 0.16 150);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-ring: oklch(0.55 0.16 150);
+}
+
+.dark[data-theme='verde'] {
+    --primary: oklch(0.75 0.16 150);
+    --primary-foreground: oklch(0.205 0 0);
+    --ring: oklch(0.75 0.16 150);
+    --sidebar-primary: oklch(0.75 0.16 150);
+    --sidebar-primary-foreground: oklch(0.205 0 0);
+    --sidebar-ring: oklch(0.75 0.16 150);
+}
+
+[data-theme='vermelho'] {
+    --primary: oklch(0.55 0.22 25);
+    --primary-foreground: oklch(0.985 0 0);
+    --ring: oklch(0.55 0.22 25);
+    --sidebar-primary: oklch(0.55 0.22 25);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-ring: oklch(0.55 0.22 25);
+}
+
+.dark[data-theme='vermelho'] {
+    --primary: oklch(0.72 0.2 25);
+    --primary-foreground: oklch(0.205 0 0);
+    --ring: oklch(0.72 0.2 25);
+    --sidebar-primary: oklch(0.72 0.2 25);
+    --sidebar-primary-foreground: oklch(0.205 0 0);
+    --sidebar-ring: oklch(0.72 0.2 25);
+}
+
+[data-theme='cinza'] {
+    --primary: oklch(0.45 0.02 255);
+    --primary-foreground: oklch(0.985 0 0);
+    --ring: oklch(0.45 0.02 255);
+    --sidebar-primary: oklch(0.45 0.02 255);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-ring: oklch(0.45 0.02 255);
+}
+
+.dark[data-theme='cinza'] {
+    --primary: oklch(0.8 0.02 255);
+    --primary-foreground: oklch(0.205 0 0);
+    --ring: oklch(0.8 0.02 255);
+    --sidebar-primary: oklch(0.8 0.02 255);
+    --sidebar-primary-foreground: oklch(0.205 0 0);
+    --sidebar-ring: oklch(0.8 0.02 255);
+}
+
 @layer base {
     * {
         @apply border-border;

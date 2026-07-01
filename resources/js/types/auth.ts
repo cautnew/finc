@@ -1,9 +1,20 @@
+export type ColorTheme =
+    | 'rosa'
+    | 'azul'
+    | 'roxo'
+    | 'verde'
+    | 'vermelho'
+    | 'preto'
+    | 'branco'
+    | 'cinza';
+
 export type User = {
     id: number;
     name: string;
     email: string;
     avatar?: string;
     email_verified_at: string | null;
+    theme: ColorTheme;
     created_at: string;
     updated_at: string;
     [key: string]: unknown;

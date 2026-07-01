@@ -1,5 +1,6 @@
 import { Head } from '@inertiajs/react';
 import AppearanceTabs from '@/components/appearance-tabs';
+import ColorThemePicker from '@/components/color-theme-picker';
 import Heading from '@/components/heading';
 import { edit as editAppearance } from '@/routes/appearance';
 
@@ -17,6 +18,13 @@ export default function Appearance() {
                     description="Update the appearance settings for your account"
                 />
                 <AppearanceTabs />
+
+                <Heading
+                    variant="small"
+                    title="Cor do tema"
+                    description="Escolha a cor de destaque usada em toda a aplicação"
+                />
+                <ColorThemePicker />
             </div>
         </>
     );

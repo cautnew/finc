@@ -1,5 +1,14 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid } from 'lucide-react';
+import {
+    ArrowLeftRight,
+    BookOpen,
+    CreditCard,
+    FolderGit2,
+    LayoutGrid,
+    Repeat,
+    Tag,
+    TrendingUp,
+} from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -14,6 +23,11 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import { index as analyticsIndex } from '@/routes/analytics';
+import { index as categoriesIndex } from '@/routes/categories';
+import { index as paymentMethodsIndex } from '@/routes/payment-methods';
+import { index as recurringTransactionsIndex } from '@/routes/recurring-transactions';
+import { index as transactionsIndex } from '@/routes/transactions';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -21,6 +35,31 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
+    },
+    {
+        title: 'Transações',
+        href: transactionsIndex(),
+        icon: ArrowLeftRight,
+    },
+    {
+        title: 'Categorias',
+        href: categoriesIndex(),
+        icon: Tag,
+    },
+    {
+        title: 'Formas de pagamento',
+        href: paymentMethodsIndex(),
+        icon: CreditCard,
+    },
+    {
+        title: 'Recorrências',
+        href: recurringTransactionsIndex(),
+        icon: Repeat,
+    },
+    {
+        title: 'Análises',
+        href: analyticsIndex(),
+        icon: TrendingUp,
     },
 ];
 
