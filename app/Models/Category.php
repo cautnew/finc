@@ -24,16 +24,25 @@ class Category extends Model
     /** @use HasFactory<CategoryFactory> */
     use HasFactory;
 
+    /**
+     * @return BelongsTo<User, Category>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return HasMany<Transaction, Category>
+     */
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
     }
 
+    /**
+     * @return HasMany<RecurringTransaction, Category>
+     */
     public function recurringTransactions(): HasMany
     {
         return $this->hasMany(RecurringTransaction::class);

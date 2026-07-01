@@ -23,16 +23,25 @@ class PaymentMethod extends Model
     /** @use HasFactory<PaymentMethodFactory> */
     use HasFactory;
 
+    /**
+     * @return BelongsTo<User, PaymentMethod>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return HasMany<Transaction, PaymentMethod>
+     */
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
     }
 
+    /**
+     * @return HasMany<RecurringTransaction, PaymentMethod>
+     */
     public function recurringTransactions(): HasMany
     {
         return $this->hasMany(RecurringTransaction::class);

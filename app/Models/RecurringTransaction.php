@@ -50,21 +50,33 @@ class RecurringTransaction extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<User, RecurringTransaction>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsTo<Category, RecurringTransaction>
+     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
+    /**
+     * @return BelongsTo<PaymentMethod, RecurringTransaction>
+     */
     public function paymentMethod(): BelongsTo
     {
         return $this->belongsTo(PaymentMethod::class);
     }
 
+    /**
+     * @return HasMany<Transaction, RecurringTransaction>
+     */
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);

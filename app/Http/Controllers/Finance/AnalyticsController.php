@@ -22,7 +22,7 @@ class AnalyticsController extends Controller
         $from = Carbon::now()->subMonthsNoOverflow(self::MONTHS - 1)->startOfMonth();
         $to = Carbon::now()->endOfMonth();
 
-        $categoryTrend = collect(range(0, self::MONTHS - 1))->map(function (int $offset) use ($user) {
+        $categoryTrend = collect(range(0, self::MONTHS - 1))->map(function (int $offset, int $index) use ($user) {
             $month = Carbon::now()->subMonthsNoOverflow(self::MONTHS - 1 - $offset)->startOfMonth();
 
             return [
