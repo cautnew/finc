@@ -7,18 +7,14 @@ import {
     Legend,
     Line,
     LineChart,
+    Rectangle,
     ResponsiveContainer,
     Tooltip,
     XAxis,
     YAxis,
 } from 'recharts';
 import Heading from '@/components/heading';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { index as analyticsIndex } from '@/routes/analytics';
 import type { BreadcrumbItem } from '@/types';
 
@@ -42,14 +38,52 @@ const formatCurrency = (value: number) =>
         currency: 'BRL',
     }).format(value);
 
-const trendColors = [
-    'oklch(0.6 0.2 25)',
-    'oklch(0.6 0.16 150)',
-    'oklch(0.55 0.2 255)',
-    'oklch(0.6 0.2 300)',
-    'oklch(0.7 0.18 70)',
-    'oklch(0.6 0.18 350)',
-];
+/**
+ * Generates `count` evenly spaced tones of the active color theme's
+ * `--primary` hue, from dark to light, for use as fallback chart colors
+ * when no user-defined color exists.
+ *
+ * @return array<int, string>
+ */
+function generateThemeTones(count: number): string[] {
+    if (count <= 0) {
+        return [];
+    }
+
+    if (typeof window === 'undefined') {
+        return Array.from({ length: count }, () => 'oklch(0.55 0.2 255)');
+    }
+
+    const raw = getComputedStyle(document.documentElement)
+        .getPropertyValue('--primary')
+        .trim();
+    const match = raw.match(/oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*\)/);
+
+    if (!match) {
+        return Array.from(
+            { length: count },
+            () => raw || 'oklch(0.55 0.2 255)',
+        );
+    }
+
+    const chroma = parseFloat(match[2]);
+    const hue = parseFloat(match[3]);
+
+    if (count === 1) {
+        return [`oklch(${match[1]} ${chroma} ${hue})`];
+    }
+
+    const minLightness = 0.32;
+    const maxLightness = 0.82;
+
+    return Array.from({ length: count }, (_, index) => {
+        const lightness =
+            minLightness +
+            ((maxLightness - minLightness) * index) / (count - 1);
+
+        return `oklch(${lightness.toFixed(3)} ${chroma} ${hue})`;
+    });
+}
 
 export default function AnalyticsIndex({
     expensesByCategory,
@@ -62,9 +96,42 @@ export default function AnalyticsIndex({
     monthlyEvolution: MonthlyEvolution[];
     categoryTrend: CategoryTrendEntry[];
 }) {
+    const categoryColorMap = useMemo(() => {
+        const missing = expensesByCategory.filter(
+            (category) => !category.color,
+        ).length;
+        const fallbackTones = generateThemeTones(missing);
+        let fallbackIndex = 0;
+
+        return new Map<number, string>(
+            expensesByCategory.map((category) => [
+                category.category_id,
+                category.color ?? fallbackTones[fallbackIndex++],
+            ]),
+        );
+    }, [expensesByCategory]);
+
     const topCategories = useMemo(
         () => expensesByCategory.slice(0, 6).map((category) => category.name),
         [expensesByCategory],
+    );
+
+    const topCategoryColors = useMemo(
+        () =>
+            expensesByCategory
+                .slice(0, 6)
+                .map((category) => categoryColorMap.get(category.category_id)),
+        [expensesByCategory, categoryColorMap],
+    );
+
+    const paymentMethodColors = useMemo(
+        () => generateThemeTones(expensesByPaymentMethod.length),
+        [expensesByPaymentMethod.length],
+    );
+
+    const [incomeColor, expenseColor] = useMemo(
+        () => generateThemeTones(2),
+        [],
     );
 
     const trendData = useMemo(
@@ -118,16 +185,15 @@ export default function AnalyticsIndex({
                                                     className="size-2.5 rounded-full"
                                                     style={{
                                                         backgroundColor:
-                                                            category.color ??
-                                                            undefined,
+                                                            categoryColorMap.get(
+                                                                category.category_id,
+                                                            ),
                                                     }}
                                                 />
                                                 {category.name}
                                             </span>
                                             <span className="font-medium">
-                                                {formatCurrency(
-                                                    category.total,
-                                                )}
+                                                {formatCurrency(category.total)}
                                             </span>
                                         </li>
                                     ))}
@@ -138,7 +204,9 @@ export default function AnalyticsIndex({
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Despesas por forma de pagamento</CardTitle>
+                            <CardTitle>
+                                Despesas por forma de pagamento
+                            </CardTitle>
                         </CardHeader>
                         <CardContent className="h-72">
                             {expensesByPaymentMethod.length === 0 ? (
@@ -146,10 +214,7 @@ export default function AnalyticsIndex({
                                     Sem despesas nos últimos meses.
                                 </p>
                             ) : (
-                                <ResponsiveContainer
-                                    width="100%"
-                                    height="100%"
-                                >
+                                <ResponsiveContainer width="100%" height="100%">
                                     <BarChart
                                         data={expensesByPaymentMethod}
                                         layout="vertical"
@@ -173,7 +238,16 @@ export default function AnalyticsIndex({
                                         <Bar
                                             dataKey="total"
                                             name="Total"
-                                            fill="oklch(0.55 0.2 255)"
+                                            shape={(props) => (
+                                                <Rectangle
+                                                    {...props}
+                                                    fill={
+                                                        paymentMethodColors[
+                                                            props.index
+                                                        ]
+                                                    }
+                                                />
+                                            )}
                                         />
                                     </BarChart>
                                 </ResponsiveContainer>
@@ -205,14 +279,14 @@ export default function AnalyticsIndex({
                                     type="monotone"
                                     dataKey="income"
                                     name="Receitas"
-                                    stroke="oklch(0.6 0.16 150)"
+                                    stroke={incomeColor}
                                     strokeWidth={2}
                                 />
                                 <Line
                                     type="monotone"
                                     dataKey="expense"
                                     name="Despesas"
-                                    stroke="oklch(0.6 0.2 25)"
+                                    stroke={expenseColor}
                                     strokeWidth={2}
                                 />
                             </LineChart>
@@ -252,11 +326,7 @@ export default function AnalyticsIndex({
                                             key={name}
                                             dataKey={name}
                                             stackId="categories"
-                                            fill={
-                                                trendColors[
-                                                    index % trendColors.length
-                                                ]
-                                            }
+                                            fill={topCategoryColors[index]}
                                         />
                                     ))}
                                 </BarChart>
