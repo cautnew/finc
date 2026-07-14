@@ -3,6 +3,7 @@
 namespace App\Actions\Transactions;
 
 use App\Enums\RecurrenceFrequency;
+use App\Models\InstallmentPlan;
 use App\Models\RecurringTransaction;
 use App\Models\Transaction;
 use App\Models\User;
@@ -11,14 +12,20 @@ use Illuminate\Support\Facades\DB;
 
 class CreateTransaction
 {
+    public function __construct(private readonly GenerateInstallmentTransactions $generateInstallments) {}
+
     /**
-     * Create a transaction, materializing a recurring template when requested.
+     * Create a transaction, materializing a recurring template or an installment plan when requested.
      *
      * @param  array<string, mixed>  $data
      */
     public function handle(User $user, array $data): Transaction
     {
         return DB::transaction(function () use ($user, $data) {
+            if ($data['is_installment'] ?? false) {
+                return $this->createInstallmentPlan($user, $data);
+            }
+
             $recurringTransactionId = null;
 
             if ($data['is_recurring'] ?? false) {
@@ -55,5 +62,29 @@ class CreateTransaction
                 'is_recurring' => $recurringTransactionId !== null,
             ]);
         });
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    private function createInstallmentPlan(User $user, array $data): Transaction
+    {
+        $plan = InstallmentPlan::create([
+            'user_id' => $user->id,
+            'category_id' => $data['category_id'] ?? null,
+            'payment_method_id' => $data['payment_method_id'] ?? null,
+            'type' => $data['type'],
+            'total_amount' => $data['amount'],
+            'installments_total' => $data['installments_total'],
+            'installments_paid' => 0,
+            'description' => $data['description'] ?? null,
+            'start_date' => $data['transaction_date'],
+        ]);
+
+        $this->generateInstallments->handle($plan);
+
+        return Transaction::where('installment_plan_id', $plan->id)
+            ->orderBy('installment_number')
+            ->firstOrFail();
     }
 }

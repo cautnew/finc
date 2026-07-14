@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Finance\AnalyticsController;
 use App\Http\Controllers\Finance\CategoryController;
+use App\Http\Controllers\Finance\InstallmentPlanController;
 use App\Http\Controllers\Finance\PaymentMethodController;
 use App\Http\Controllers\Finance\RecurringTransactionController;
 use App\Http\Controllers\Finance\TransactionController;
@@ -13,6 +14,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('transactions', TransactionController::class)->except(['show', 'create', 'edit']);
     Route::resource('recurring-transactions', RecurringTransactionController::class)->only(['index', 'update', 'destroy']);
     Route::post('recurring-transactions/{recurring_transaction}/launch', [RecurringTransactionController::class, 'launch'])->name('recurring-transactions.launch');
+    Route::resource('installment-plans', InstallmentPlanController::class)->only(['index', 'update', 'destroy']);
 
     Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
 });

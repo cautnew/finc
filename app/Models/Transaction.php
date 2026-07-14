@@ -16,16 +16,20 @@ use Illuminate\Support\Carbon;
  * @property int|null $category_id
  * @property int|null $payment_method_id
  * @property int|null $recurring_transaction_id
+ * @property int|null $installment_plan_id
  * @property TransactionType $type
  * @property string $amount
  * @property Carbon $transaction_date
  * @property Carbon|null $due_date
  * @property string|null $description
  * @property bool $is_recurring
+ * @property int|null $installment_number
+ * @property int|null $installments_total
+ * @property bool $is_installment
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
-#[Fillable(['user_id', 'category_id', 'payment_method_id', 'recurring_transaction_id', 'type', 'amount', 'transaction_date', 'due_date', 'description', 'is_recurring'])]
+#[Fillable(['user_id', 'category_id', 'payment_method_id', 'recurring_transaction_id', 'installment_plan_id', 'type', 'amount', 'transaction_date', 'due_date', 'description', 'is_recurring', 'installment_number', 'installments_total', 'is_installment'])]
 class Transaction extends Model
 {
     /** @use HasFactory<TransactionFactory> */
@@ -42,6 +46,9 @@ class Transaction extends Model
             'transaction_date' => 'date:Y-m-d',
             'due_date' => 'date:Y-m-d',
             'is_recurring' => 'boolean',
+            'installment_number' => 'integer',
+            'installments_total' => 'integer',
+            'is_installment' => 'boolean',
         ];
     }
 
@@ -63,5 +70,10 @@ class Transaction extends Model
     public function recurringTransaction(): BelongsTo
     {
         return $this->belongsTo(RecurringTransaction::class);
+    }
+
+    public function installmentPlan(): BelongsTo
+    {
+        return $this->belongsTo(InstallmentPlan::class);
     }
 }

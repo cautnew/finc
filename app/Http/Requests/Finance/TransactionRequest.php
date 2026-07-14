@@ -5,6 +5,7 @@ namespace App\Http\Requests\Finance;
 use App\Enums\RecurrenceFrequency;
 use App\Enums\TransactionType;
 use App\Models\Transaction;
+use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -47,6 +48,15 @@ class TransactionRequest extends FormRequest
             'is_recurring' => ['boolean'],
             'frequency' => ['required_if:is_recurring,true', Rule::enum(RecurrenceFrequency::class)],
             'end_date' => ['nullable', 'date', 'after_or_equal:transaction_date'],
+            'is_installment' => [
+                'boolean',
+                function (string $attribute, mixed $value, Closure $fail): void {
+                    if ($value && $this->boolean('is_recurring')) {
+                        $fail(__('A transaction cannot be both recurring and installment-based.'));
+                    }
+                },
+            ],
+            'installments_total' => ['required_if:is_installment,true', 'integer', 'min:2', 'max:60'],
         ];
     }
 }

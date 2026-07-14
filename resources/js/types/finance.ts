@@ -21,6 +21,9 @@ export type Transaction = {
     due_date: string | null;
     description: string | null;
     is_recurring: boolean;
+    is_installment: boolean;
+    installment_number: number | null;
+    installments_total: number | null;
     category: Category | null;
     payment_method: PaymentMethod | null;
 };
@@ -35,6 +38,19 @@ export type RecurringTransaction = {
     next_run_date: string;
     end_date: string | null;
     active: boolean;
+    category: Category | null;
+    payment_method: PaymentMethod | null;
+};
+
+export type InstallmentPlan = {
+    id: number;
+    type: TransactionType;
+    total_amount: string;
+    installments_total: number;
+    installments_paid: number;
+    percentage_remaining: number;
+    description: string | null;
+    start_date: string;
     category: Category | null;
     payment_method: PaymentMethod | null;
 };

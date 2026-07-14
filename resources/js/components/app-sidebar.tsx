@@ -4,6 +4,7 @@ import {
     BookOpen,
     CreditCard,
     FolderGit2,
+    Layers,
     LayoutGrid,
     Repeat,
     Tag,
@@ -25,6 +26,7 @@ import {
 import { dashboard } from '@/routes';
 import { index as analyticsIndex } from '@/routes/analytics';
 import { index as categoriesIndex } from '@/routes/categories';
+import { index as installmentPlansIndex } from '@/routes/installment-plans';
 import { index as paymentMethodsIndex } from '@/routes/payment-methods';
 import { index as recurringTransactionsIndex } from '@/routes/recurring-transactions';
 import { index as transactionsIndex } from '@/routes/transactions';
@@ -55,6 +57,11 @@ const mainNavItems: NavItem[] = [
         title: 'Recorrências',
         href: recurringTransactionsIndex(),
         icon: Repeat,
+    },
+    {
+        title: 'Parcelamentos',
+        href: installmentPlansIndex(),
+        icon: Layers,
     },
     {
         title: 'Análises',

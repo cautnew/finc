@@ -67,6 +67,7 @@ export default function TransactionsIndex({
     const [open, setOpen] = useState(false);
     const [editing, setEditing] = useState<Transaction | null>(null);
     const [isRecurring, setIsRecurring] = useState(false);
+    const [isInstallment, setIsInstallment] = useState(false);
     const [filterState, setFilterState] = useState<Filters>(filters);
 
     const applyFilters = () => {
@@ -88,12 +89,14 @@ export default function TransactionsIndex({
     const openCreate = () => {
         setEditing(null);
         setIsRecurring(false);
+        setIsInstallment(false);
         setOpen(true);
     };
 
     const openEdit = (transaction: Transaction) => {
         setEditing(transaction);
         setIsRecurring(false);
+        setIsInstallment(false);
         setOpen(true);
     };
 
@@ -184,7 +187,9 @@ export default function TransactionsIndex({
 
                                             <div className="grid gap-2">
                                                 <Label htmlFor="amount">
-                                                    Valor
+                                                    {isInstallment
+                                                        ? 'Valor total da compra'
+                                                        : 'Valor'}
                                                 </Label>
                                                 <Input
                                                     id="amount"
@@ -367,34 +372,96 @@ export default function TransactionsIndex({
                                         </div>
 
                                         {editing ? (
-                                            editing.is_recurring && (
-                                                <p className="text-sm text-muted-foreground">
-                                                    Esta transação foi gerada
-                                                    por uma recorrência. A
-                                                    edição altera apenas esta
-                                                    ocorrência.
-                                                </p>
-                                            )
+                                            <>
+                                                {editing.is_recurring && (
+                                                    <p className="text-sm text-muted-foreground">
+                                                        Esta transação foi
+                                                        gerada por uma
+                                                        recorrência. A edição
+                                                        altera apenas esta
+                                                        ocorrência.
+                                                    </p>
+                                                )}
+                                                {editing.is_installment && (
+                                                    <p className="text-sm text-muted-foreground">
+                                                        Esta transação é a
+                                                        parcela{' '}
+                                                        {
+                                                            editing.installment_number
+                                                        }
+                                                        /
+                                                        {
+                                                            editing.installments_total
+                                                        }{' '}
+                                                        de um parcelamento.
+                                                        Para editar o valor
+                                                        total ou o número de
+                                                        parcelas, use a página
+                                                        Parcelamentos.
+                                                    </p>
+                                                )}
+                                            </>
                                         ) : (
                                             <div className="space-y-4 rounded-lg border p-4">
-                                                <div className="flex items-center gap-2">
-                                                    <Checkbox
-                                                        id="is_recurring"
-                                                        name="is_recurring"
-                                                        value="1"
-                                                        checked={isRecurring}
-                                                        onCheckedChange={(
-                                                            checked,
-                                                        ) =>
-                                                            setIsRecurring(
-                                                                checked ===
-                                                                    true,
-                                                            )
-                                                        }
-                                                    />
-                                                    <Label htmlFor="is_recurring">
-                                                        Transação recorrente
-                                                    </Label>
+                                                <div className="flex items-center gap-4">
+                                                    <div className="flex items-center gap-2">
+                                                        <Checkbox
+                                                            id="is_recurring"
+                                                            name="is_recurring"
+                                                            value="1"
+                                                            checked={
+                                                                isRecurring
+                                                            }
+                                                            onCheckedChange={(
+                                                                checked,
+                                                            ) => {
+                                                                const value =
+                                                                    checked ===
+                                                                    true;
+                                                                setIsRecurring(
+                                                                    value,
+                                                                );
+                                                                if (value) {
+                                                                    setIsInstallment(
+                                                                        false,
+                                                                    );
+                                                                }
+                                                            }}
+                                                        />
+                                                        <Label htmlFor="is_recurring">
+                                                            Transação
+                                                            recorrente
+                                                        </Label>
+                                                    </div>
+
+                                                    <div className="flex items-center gap-2">
+                                                        <Checkbox
+                                                            id="is_installment"
+                                                            name="is_installment"
+                                                            value="1"
+                                                            checked={
+                                                                isInstallment
+                                                            }
+                                                            onCheckedChange={(
+                                                                checked,
+                                                            ) => {
+                                                                const value =
+                                                                    checked ===
+                                                                    true;
+                                                                setIsInstallment(
+                                                                    value,
+                                                                );
+                                                                if (value) {
+                                                                    setIsRecurring(
+                                                                        false,
+                                                                    );
+                                                                }
+                                                            }}
+                                                        />
+                                                        <Label htmlFor="is_installment">
+                                                            Compra parcelada
+                                                        </Label>
+                                                    </div>
                                                 </div>
 
                                                 {isRecurring && (
@@ -451,6 +518,29 @@ export default function TransactionsIndex({
                                                                 }
                                                             />
                                                         </div>
+                                                    </div>
+                                                )}
+
+                                                {isInstallment && (
+                                                    <div className="grid gap-2">
+                                                        <Label htmlFor="installments_total">
+                                                            Número de parcelas
+                                                        </Label>
+                                                        <Input
+                                                            id="installments_total"
+                                                            type="number"
+                                                            step="1"
+                                                            min="2"
+                                                            max="60"
+                                                            name="installments_total"
+                                                            required
+                                                            defaultValue={2}
+                                                        />
+                                                        <InputError
+                                                            message={
+                                                                errors.installments_total
+                                                            }
+                                                        />
                                                     </div>
                                                 )}
                                             </div>
@@ -662,6 +752,18 @@ export default function TransactionsIndex({
                                             {transaction.is_recurring && (
                                                 <Badge variant="outline">
                                                     Recorrente
+                                                </Badge>
+                                            )}
+                                            {transaction.is_installment && (
+                                                <Badge variant="outline">
+                                                    Parcela{' '}
+                                                    {
+                                                        transaction.installment_number
+                                                    }
+                                                    /
+                                                    {
+                                                        transaction.installments_total
+                                                    }
                                                 </Badge>
                                             )}
                                         </div>
