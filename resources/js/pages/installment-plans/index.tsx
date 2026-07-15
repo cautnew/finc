@@ -22,6 +22,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import { index as installmentPlansIndex } from '@/routes/installment-plans';
 import type {
     BreadcrumbItem,
@@ -403,6 +404,21 @@ export default function InstallmentPlansIndex({
                                         <InputError
                                             message={errors.description}
                                         />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="notes">
+                                            Observações
+                                        </Label>
+                                        <Textarea
+                                            id="notes"
+                                            name="notes"
+                                            placeholder="Anotações sobre este parcelamento..."
+                                            defaultValue={
+                                                editing.notes ?? undefined
+                                            }
+                                        />
+                                        <InputError message={errors.notes} />
                                     </div>
 
                                     <p className="text-sm text-muted-foreground">

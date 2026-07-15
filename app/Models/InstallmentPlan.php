@@ -22,12 +22,13 @@ use Illuminate\Support\Carbon;
  * @property int $installments_total
  * @property int $installments_paid
  * @property string|null $description
+ * @property string|null $notes
  * @property Carbon $start_date
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read float $percentage_remaining
  */
-#[Fillable(['user_id', 'category_id', 'payment_method_id', 'type', 'total_amount', 'installments_total', 'installments_paid', 'description', 'start_date'])]
+#[Fillable(['user_id', 'category_id', 'payment_method_id', 'type', 'total_amount', 'installments_total', 'installments_paid', 'description', 'notes', 'start_date'])]
 class InstallmentPlan extends Model
 {
     /** @use HasFactory<InstallmentPlanFactory> */

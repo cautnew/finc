@@ -27,11 +27,15 @@ test('user can create a transaction', function () {
         'category_id' => $category->id,
         'payment_method_id' => $paymentMethod->id,
         'description' => 'Mercado',
+        'notes' => 'Compra do mês, cartão final 1234',
     ]);
 
     $response->assertSessionHasNoErrors()->assertRedirect(route('transactions.index'));
 
-    expect($user->transactions()->where('description', 'Mercado')->exists())->toBeTrue();
+    $transaction = $user->transactions()->where('description', 'Mercado')->first();
+
+    expect($transaction)->not->toBeNull();
+    expect($transaction->notes)->toBe('Compra do mês, cartão final 1234');
 });
 
 test('creating a recurring transaction also creates its template', function () {
@@ -81,11 +85,14 @@ test('user can update their own transaction', function () {
         'type' => 'income',
         'amount' => '99.99',
         'transaction_date' => '2026-02-01',
+        'notes' => 'Ajustado manualmente',
     ]);
 
     $response->assertSessionHasNoErrors()->assertRedirect(route('transactions.index'));
 
-    expect($transaction->fresh()->amount)->toBe('99.99');
+    $transaction->refresh();
+    expect($transaction->amount)->toBe('99.99');
+    expect($transaction->notes)->toBe('Ajustado manualmente');
 });
 
 test('user cannot delete another users transaction', function () {

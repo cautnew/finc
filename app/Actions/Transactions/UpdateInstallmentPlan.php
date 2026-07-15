@@ -26,6 +26,7 @@ class UpdateInstallmentPlan
                 'installments_total' => $data['installments_total'],
                 'installments_paid' => min((int) $data['installments_paid'], (int) $data['installments_total']),
                 'description' => $data['description'] ?? null,
+                'notes' => $data['notes'] ?? null,
             ]);
 
             if ($installmentsTotalChanged) {

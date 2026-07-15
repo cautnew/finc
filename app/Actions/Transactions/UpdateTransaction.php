@@ -24,6 +24,7 @@ class UpdateTransaction
             'transaction_date' => $data['transaction_date'],
             'due_date' => $data['due_date'] ?? null,
             'description' => $data['description'] ?? null,
+            'notes' => $data['notes'] ?? null,
         ]);
 
         return $transaction;

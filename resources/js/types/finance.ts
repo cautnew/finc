@@ -20,6 +20,7 @@ export type Transaction = {
     transaction_date: string;
     due_date: string | null;
     description: string | null;
+    notes: string | null;
     is_recurring: boolean;
     is_installment: boolean;
     installment_number: number | null;
@@ -50,6 +51,7 @@ export type InstallmentPlan = {
     installments_paid: number;
     percentage_remaining: number;
     description: string | null;
+    notes: string | null;
     start_date: string;
     category: Category | null;
     payment_method: PaymentMethod | null;

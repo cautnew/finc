@@ -45,6 +45,7 @@ class TransactionRequest extends FormRequest
                 Rule::exists('payment_methods', 'id')->where('user_id', $userId),
             ],
             'description' => ['nullable', 'string', 'max:1000'],
+            'notes' => ['nullable', 'string', 'max:5000'],
             'is_recurring' => ['boolean'],
             'frequency' => ['required_if:is_recurring,true', Rule::enum(RecurrenceFrequency::class)],
             'end_date' => ['nullable', 'date', 'after_or_equal:transaction_date'],

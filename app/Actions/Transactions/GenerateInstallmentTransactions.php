@@ -26,6 +26,7 @@ class GenerateInstallmentTransactions
                 'amount' => $amount,
                 'transaction_date' => $date->copy()->addMonthsNoOverflow($index),
                 'description' => $plan->description,
+                'notes' => $plan->notes,
                 'is_installment' => true,
                 'installment_number' => $index + 1,
                 'installments_total' => $plan->installments_total,

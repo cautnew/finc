@@ -39,6 +39,7 @@ class CreateTransaction
                     'type' => $data['type'],
                     'amount' => $data['amount'],
                     'description' => $data['description'] ?? null,
+                    'notes' => $data['notes'] ?? null,
                     'frequency' => $frequency,
                     'start_date' => $transactionDate,
                     'next_run_date' => $frequency->nextOccurrence($transactionDate),
@@ -59,6 +60,7 @@ class CreateTransaction
                 'transaction_date' => $data['transaction_date'],
                 'due_date' => $data['due_date'] ?? null,
                 'description' => $data['description'] ?? null,
+                'notes' => $data['notes'] ?? null,
                 'is_recurring' => $recurringTransactionId !== null,
             ]);
         });
@@ -78,6 +80,7 @@ class CreateTransaction
             'installments_total' => $data['installments_total'],
             'installments_paid' => 0,
             'description' => $data['description'] ?? null,
+            'notes' => $data['notes'] ?? null,
             'start_date' => $data['transaction_date'],
         ]);
 

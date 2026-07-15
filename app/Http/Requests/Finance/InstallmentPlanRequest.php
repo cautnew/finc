@@ -38,6 +38,7 @@ class InstallmentPlanRequest extends FormRequest
                 Rule::exists('payment_methods', 'id')->where('user_id', $userId),
             ],
             'description' => ['nullable', 'string', 'max:1000'],
+            'notes' => ['nullable', 'string', 'max:5000'],
         ];
     }
 }

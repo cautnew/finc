@@ -15,6 +15,7 @@ test('creating an installment transaction generates the plan and every installme
         'is_installment' => true,
         'installments_total' => 3,
         'description' => 'Geladeira',
+        'notes' => 'Comprada na loja X, garantia de 1 ano',
     ]);
 
     $response->assertSessionHasNoErrors()->assertRedirect(route('transactions.index'));
@@ -24,6 +25,7 @@ test('creating an installment transaction generates the plan and every installme
     expect($plan->total_amount)->toBe('100.00');
     expect($plan->installments_total)->toBe(3);
     expect($plan->installments_paid)->toBe(0);
+    expect($plan->notes)->toBe('Comprada na loja X, garantia de 1 ano');
 
     $installments = Transaction::where('installment_plan_id', $plan->id)
         ->orderBy('installment_number')
@@ -34,6 +36,7 @@ test('creating an installment transaction generates the plan and every installme
     expect($installments->pluck('installment_number')->all())->toBe([1, 2, 3]);
     expect($installments->pluck('installments_total')->all())->toBe([3, 3, 3]);
     expect($installments->every(fn (Transaction $t) => $t->is_installment))->toBeTrue();
+    expect($installments->every(fn (Transaction $t) => $t->notes === 'Comprada na loja X, garantia de 1 ano'))->toBeTrue();
     expect($installments[0]->transaction_date->toDateString())->toBe('2026-01-10');
     expect($installments[1]->transaction_date->toDateString())->toBe('2026-02-10');
     expect($installments[2]->transaction_date->toDateString())->toBe('2026-03-10');
@@ -77,6 +80,7 @@ test('updating the total amount without changing the installment count redistrib
         'total_amount' => '150.00',
         'installments_total' => 3,
         'installments_paid' => 1,
+        'notes' => 'Renegociado com o vendedor',
     ]);
 
     $response->assertSessionHasNoErrors()->assertRedirect(route('installment-plans.index'));
@@ -84,6 +88,7 @@ test('updating the total amount without changing the installment count redistrib
     $plan->refresh();
     expect($plan->total_amount)->toBe('150.00');
     expect($plan->installments_paid)->toBe(1);
+    expect($plan->notes)->toBe('Renegociado com o vendedor');
 
     $installments = $plan->transactions()->orderBy('installment_number')->get();
     expect($installments)->toHaveCount(3);

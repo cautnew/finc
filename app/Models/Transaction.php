@@ -22,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon $transaction_date
  * @property Carbon|null $due_date
  * @property string|null $description
+ * @property string|null $notes
  * @property bool $is_recurring
  * @property int|null $installment_number
  * @property int|null $installments_total
@@ -29,7 +30,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
-#[Fillable(['user_id', 'category_id', 'payment_method_id', 'recurring_transaction_id', 'installment_plan_id', 'type', 'amount', 'transaction_date', 'due_date', 'description', 'is_recurring', 'installment_number', 'installments_total', 'is_installment'])]
+#[Fillable(['user_id', 'category_id', 'payment_method_id', 'recurring_transaction_id', 'installment_plan_id', 'type', 'amount', 'transaction_date', 'due_date', 'description', 'notes', 'is_recurring', 'installment_number', 'installments_total', 'is_installment'])]
 class Transaction extends Model
 {
     /** @use HasFactory<TransactionFactory> */
