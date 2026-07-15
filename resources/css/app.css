@@ -142,16 +142,16 @@
  * neutral palette already defined in :root/.dark.
  */
 [data-theme='rosa'] {
-    --primary: oklch(0.55 0.22 350);
+    --primary: rgb(232 43 147);
     --primary-foreground: oklch(0.985 0 0);
-    --ring: oklch(0.55 0.22 350);
+    --ring: rgb(232 43 147);
     --accent: oklch(0.94 0.05 350);
-    --accent-foreground: oklch(0.55 0.22 350);
-    --sidebar-primary: oklch(0.55 0.22 350);
+    --accent-foreground: rgb(232 43 147);
+    --sidebar-primary: rgb(232 43 147);
     --sidebar-primary-foreground: oklch(0.985 0 0);
     --sidebar-accent: oklch(0.94 0.05 350);
-    --sidebar-accent-foreground: oklch(0.55 0.22 350);
-    --sidebar-ring: oklch(0.55 0.22 350);
+    --sidebar-accent-foreground: rgb(232 43 147);
+    --sidebar-ring: rgb(232 43 147);
 }
 
 .dark[data-theme='rosa'] {

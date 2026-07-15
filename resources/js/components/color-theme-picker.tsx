@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import type { Auth, ColorTheme } from '@/types';
 
 const themes: { value: ColorTheme; label: string; swatch: string }[] = [
-    { value: 'rosa', label: 'Rosa', swatch: 'oklch(0.55 0.22 350)' },
+    { value: 'rosa', label: 'Rosa', swatch: 'rgb(232 43 147)' },
     { value: 'azul', label: 'Azul', swatch: 'oklch(0.55 0.2 255)' },
     { value: 'roxo', label: 'Roxo', swatch: 'oklch(0.5 0.22 300)' },
     { value: 'verde', label: 'Verde', swatch: 'oklch(0.55 0.16 150)' },
